@@ -3,7 +3,19 @@ package model;
 public class AVL<K extends Comparable<K>,V> implements ABB<Node<K,V>,K  >{
 
     private Node<K,V> root;
-
+    @Override
+    public String inOrder(){
+        return inOrder(root);
+    }
+    private String inOrder(Node<K,V> node){
+        String out = "";
+        if(node!=null){
+            out += inOrder(node.getLeft());
+            out +=node.print();
+            out +=inOrder(node.getRight());
+        }
+        return out;
+    }
     @Override
     public Node<K, V> treeSearch(Node<K, V> x, K k) {
         if(x==null || k.equals(x.getKey())){
@@ -24,9 +36,9 @@ public class AVL<K extends Comparable<K>,V> implements ABB<Node<K,V>,K  >{
             return node;
         }
         if(node.getKey().compareTo(current.getKey())<0){
-            node.setLeft(treeInsert(node,current.getLeft()));
+            current.setLeft(treeInsert(node,current.getLeft()));
         } else if (node.getKey().compareTo(current.getKey())>0) {
-            node.setRight(treeInsert(node,current.getRight()));
+            current.setRight(treeInsert(node,current.getRight()));
         }else {
             return current;
         }
@@ -35,8 +47,11 @@ public class AVL<K extends Comparable<K>,V> implements ABB<Node<K,V>,K  >{
     }
 
     @Override
-    public void treeDelete(Node<K, V> node) {
-        root = treeDelete(node,root);
+    public void treeDelete(K value) {
+        Node<K,V> tem = treeSearch(root,value);
+        if(tem!=null) {
+            root = treeDelete(tem, root);
+        }
     }
 
     private Node<K,V> treeDelete(Node<K,V> node, Node<K, V> current) {
@@ -44,19 +59,19 @@ public class AVL<K extends Comparable<K>,V> implements ABB<Node<K,V>,K  >{
             return null;
         }
         if(node.getKey().compareTo(current.getKey())<0){
-            node.setLeft(treeDelete(node,current.getLeft()));
+            current.setLeft(treeDelete(node,current.getLeft()));
         } else if (node.getKey().compareTo(current.getKey())>0) {
-            node.setRight(treeDelete(node,current.getRight()));
+            current.setRight(treeDelete(node,current.getRight()));
         }else { // significa que lo encontro
             if(current.getLeft()==null){
                 return current.getRight();
             } else if (current.getRight()==null) {
                 return current.getLeft();
             }
-            Node<K,V> predecessor = getMaximum(node.getLeft());
-            node.setKey(predecessor.getKey());
-            node.setValue(predecessor.getValue());
-            node.setLeft(treeDelete(node,node.getLeft()));
+            Node<K,V> predecessor = getMaximum(current.getLeft());
+            current.setKey(predecessor.getKey());
+            current.setValue(predecessor.getValue());
+            current.setLeft(treeDelete(node,current.getLeft()));
         }
         updateHeight(current);
         return toRotate(current);
@@ -76,7 +91,9 @@ public class AVL<K extends Comparable<K>,V> implements ABB<Node<K,V>,K  >{
         return node;
     }
     private void updateHeight(Node<K,V> node){
-        node.setHeight((Math.max(height(node.getLeft()),height(node.getRight())))+1);
+        if(node!=null) {
+            node.setHeight((Math.max(height(node.getLeft()), height(node.getRight()))) + 1);
+        }
     }
     private int height(Node<K,V> node){
         return node != null ? node.getHeight() : 0;
@@ -110,8 +127,8 @@ public class AVL<K extends Comparable<K>,V> implements ABB<Node<K,V>,K  >{
         return nodesLeftChild;
     }
     public Node<K,V> rotatingLeft(Node<K,V> node){
-        Node<K,V> nodesRightChild = node.getLeft();
-        Node<K,V> nodesRightLeftChild = nodesRightChild.getRight();
+        Node<K,V> nodesRightChild = node.getRight();
+        Node<K,V> nodesRightLeftChild = nodesRightChild.getLeft();
         nodesRightChild.setLeft(node);
         node.setRight(nodesRightLeftChild);
         updateHeight(node);
@@ -119,4 +136,11 @@ public class AVL<K extends Comparable<K>,V> implements ABB<Node<K,V>,K  >{
         return nodesRightChild;
     }
 
+    public Node<K, V> getRoot() {
+        return root;
+    }
+
+    public void setRoot(Node<K, V> root) {
+        this.root = root;
+    }
 }

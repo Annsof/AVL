@@ -5,6 +5,7 @@ public interface ABB<X,K extends Comparable<K>> {
     X getMinimum(X x);
     X getMaximum(X x);
     void treeInsert(X x);
-    void treeDelete(X x);
+    void treeDelete(K k);
+    String inOrder();
 
 }

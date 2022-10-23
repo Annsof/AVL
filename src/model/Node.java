@@ -12,6 +12,14 @@ public class Node<K extends Comparable<K>,V> implements Comparable<Node<K,V>> {
 
     private Node<K,V> left;
 
+    public Node(K key,V value) {
+        this.value = value;
+        this.key = key;
+    }
+    public String print(){
+        return "Key: "+key+", Value: "+value;
+    }
+
     public V getValue() {
         return value;
     }

@@ -1,10 +1,9 @@
 package model;
 
-public interface ABB<X extends Comparable<X>,K extends Comparable<K>> {
+public interface ABB<X,K extends Comparable<K>> {
     X treeSearch(X x,K k);
-    X treeMinimum(X x);
-    X treeMaximum(X x);
-    X treeSuccessor(X x);
+    X getMinimum(X x);
+    X getMaximum(X x);
     void treeInsert(X x);
     void treeDelete(X x);
 

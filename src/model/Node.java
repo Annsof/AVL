@@ -6,9 +6,7 @@ public class Node<K extends Comparable<K>,V> implements Comparable<Node<K,V>> {
 
     private K key;
 
-    private int balanceFactor;
-
-    private int height;
+    private int height=1;
 
     private Node<K,V> right;
 
@@ -20,14 +18,6 @@ public class Node<K extends Comparable<K>,V> implements Comparable<Node<K,V>> {
 
     public void setValue(V value) {
         this.value = value;
-    }
-
-    public int getBalanceFactor() {
-        return balanceFactor;
-    }
-
-    public void setBalanceFactor(int balanceFactor) {
-        this.balanceFactor = balanceFactor;
     }
 
     public int getHeight() {
